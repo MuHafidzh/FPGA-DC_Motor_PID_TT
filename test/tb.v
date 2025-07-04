@@ -32,7 +32,7 @@ module tb ();
     reg [1:0] ENC_B;
 
     // Instantiate the top module
-    top_motor_control uut (
+    tt_um_top_motor_control uut (
         .CLK100MHZ(CLK100MHZ),
         .CPU_RESETN(CPU_RESETN),
         .UART_RX(UART_RX),

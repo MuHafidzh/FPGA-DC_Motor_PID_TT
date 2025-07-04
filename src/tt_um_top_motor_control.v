@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 
-module top_motor_control(
+module tt_um_top_motor_control(
     input wire CLK100MHZ,
     input wire CPU_RESETN,
     // UART
