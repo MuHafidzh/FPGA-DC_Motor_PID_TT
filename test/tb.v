@@ -11,7 +11,7 @@ module tb ();
     end
 
     // Clock and reset
-    reg CLK100MHZ;
+    reg clk;
     reg CPU_RESETN;
 
     // UART
@@ -33,7 +33,7 @@ module tb ();
 
     // Instantiate the top module
     tt_um_top_motor_control uut (
-        .CLK100MHZ(CLK100MHZ),
+        .clk(clk),
         .CPU_RESETN(CPU_RESETN),
         .UART_RX(UART_RX),
         .UART_TX(UART_TX),
