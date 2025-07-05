@@ -13,6 +13,7 @@ module tt_um_top_motor_control(
 );
     // Port tambahan
     wire UART_TX;
+    wire UART_RX;
     wire [1:0] PWM_OUT;
     wire [3:0] MOTOR_IN;
     wire [3:0] LED;
@@ -22,6 +23,7 @@ module tt_um_top_motor_control(
     // Pemetaan port tambahan ke port standar
     assign ENC_A = ui_in[1:0];       // Gunakan 2 bit pertama dari ui_in untuk ENC_A
     assign ENC_B = ui_in[3:2];       // Gunakan 2 bit berikutnya dari ui_in untuk ENC_B
+    assign UART_RX = ui_in[4];       // Gunakan bit ke-5 dari ui_in untuk UART_RX
     assign uo_out[0] = UART_TX;      // Gunakan bit pertama dari uo_out untuk UART_TX
     assign uo_out[2:1] = PWM_OUT;    // Gunakan bit kedua dan ketiga dari uo_out untuk PWM_OUT
     assign uo_out[6:3] = MOTOR_IN;   // Gunakan bit keempat hingga ketujuh dari uo_out untuk MOTOR_IN
