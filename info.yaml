@@ -28,30 +28,30 @@ project:
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
 pinout:
   # Inputs
-  ui[0]: "CLK100MHZ"          # Clock input
-  ui[1]: "CPU_RESETN"        # CPU reset input
-  ui[2]: "UART_RX"           # UART receive input
-  ui[3]: "ENC_A"             # Encoder A input
-  ui[4]: "ENC_B"             # Encoder B input
+  ui[0]: "ENC_A[0]"          # Encoder A bit 0
+  ui[1]: "ENC_A[1]"          # Encoder A bit 1
+  ui[2]: "ENC_B[0]"          # Encoder B bit 0
+  ui[3]: "ENC_B[1]"          # Encoder B bit 1
+  ui[4]: "ENA"               # Enable signal
   ui[5]: ""
   ui[6]: ""
   ui[7]: ""
 
   # Outputs
   uo[0]: "UART_TX"           # UART transmit output
-  uo[1]: "PWM_OUT"          # PWM output for motor control
-  uo[2]: "MOTOR_IN"          # Motor direction control output
-  uo[3]: "LED"               # LEDs for visualizing motor direction
-  uo[4]: ""
-  uo[5]: ""
-  uo[6]: ""
+  uo[1]: "PWM_OUT[0]"        # PWM output bit 0
+  uo[2]: "PWM_OUT[1]"        # PWM output bit 1
+  uo[3]: "MOTOR_IN[0]"       # Motor direction bit 0
+  uo[4]: "MOTOR_IN[1]"       # Motor direction bit 1
+  uo[5]: "MOTOR_IN[2]"       # Motor direction bit 2
+  uo[6]: "MOTOR_IN[3]"       # Motor direction bit 3
   uo[7]: ""
 
   # Bidirectional pins
-  uio[0]: ""
-  uio[1]: ""
-  uio[2]: ""
-  uio[3]: ""
+  uio[0]: "LED[0]"           # LED bit 0
+  uio[1]: "LED[1]"           # LED bit 1
+  uio[2]: "LED[2]"           # LED bit 2
+  uio[3]: "LED[3]"           # LED bit 3
   uio[4]: ""
   uio[5]: ""
   uio[6]: ""

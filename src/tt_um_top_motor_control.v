@@ -1,25 +1,51 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 
+// module tt_um_top_motor_control(
+//     input wire clk,
+//     input wire rst_n,
+//     // UART
+//     input wire UART_RX,
+//     output wire UART_TX,
+//     // PWM output
+//     output wire [1:0] PWM_OUT,
+//     // Motor direction signal
+//     output wire [3:0] MOTOR_IN,
+//     // LEDs for visualize the IN
+//     output wire [3:0] LED,
+//     // Encoder input
+//     input wire [1:0] ENC_A,
+//     input wire [1:0] ENC_B,
+
+//     input wire ena
+// );
 module tt_um_top_motor_control(
-    input wire clk,
-    input wire rst_n,
-    // UART
-    input wire UART_RX,
-    output wire UART_TX,
-    // PWM output
-    output wire [1:0] PWM_OUT,
-    // Motor direction signal
-    output wire [3:0] MOTOR_IN,
-    // LEDs for visualize the IN
-    output wire [3:0] LED,
-    // Encoder input
-    input wire [1:0] ENC_A,
-    input wire [1:0] ENC_B,
-
-    input wire ena
+    input wire clk,          // Clock input
+    input wire rst_n,        // Reset input
+    input wire ena,          // Enable signal
+    input wire [7:0] ui_in,  // Dedicated inputs
+    input wire [7:0] uio_in, // IOs: Input path
+    output wire [7:0] uo_out, // Dedicated outputs
+    output wire [7:0] uio_out, // IOs: Output path
+    output wire [7:0] uio_oe  // IOs: Enable path (active high: 0=input, 1=output)
 );
+    // Port tambahan
+    wire UART_TX;
+    wire [1:0] PWM_OUT;
+    wire [3:0] MOTOR_IN;
+    wire [3:0] LED;
+    wire [1:0] ENC_A;
+    wire [1:0] ENC_B;
 
+    // Pemetaan port tambahan ke port standar
+    assign ENC_A = ui_in[1:0];       // Gunakan 2 bit pertama dari ui_in untuk ENC_A
+    assign ENC_B = ui_in[3:2];       // Gunakan 2 bit berikutnya dari ui_in untuk ENC_B
+    assign uo_out[0] = UART_TX;      // Gunakan bit pertama dari uo_out untuk UART_TX
+    assign uo_out[2:1] = PWM_OUT;    // Gunakan bit kedua dan ketiga dari uo_out untuk PWM_OUT
+    assign uo_out[6:3] = MOTOR_IN;   // Gunakan bit keempat hingga ketujuh dari uo_out untuk MOTOR_IN
+    assign uio_out[3:0] = LED;       // Gunakan 4 bit pertama dari uio_out untuk LED
+    assign uio_oe = 8'b11111111;
+    
     // UART byte-wise interface
     wire [7:0] uart_rx_data;
     wire uart_rx_valid;
