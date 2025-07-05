@@ -79,7 +79,9 @@ module pid_controller (
                 pid_timer <= 0;
                 
                 // Calculate error
-                error <= setpoint - feedback;
+                // error <= setpoint - feedback;
+                // Sign-extend setpoint and feedback to 32 bits before subtraction
+                error <= $signed({{16{setpoint[15]}}, setpoint}) - $signed({{16{feedback[15]}}, feedback});
                 
                 // Reset integral and output when setpoint is zero (motor disabled)
                 if (setpoint == 0) begin
