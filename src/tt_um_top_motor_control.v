@@ -28,6 +28,12 @@ module tt_um_top_motor_control(
     assign uo_out[2:1] = PWM_OUT;    // Gunakan bit kedua dan ketiga dari uo_out untuk PWM_OUT
     assign uo_out[6:3] = MOTOR_IN;   // Gunakan bit keempat hingga ketujuh dari uo_out untuk MOTOR_IN
     assign uio_out[3:0] = LED;       // Gunakan 4 bit pertama dari uio_out untuk LED
+
+    //set ke 0 jika tidak digunakan
+    //out
+    assign uo_out[7] = 1'b0;         // Bit ke-8 dari uo_out tidak digunakan
+    assign uio_out[7:4] = 4'b0000;   // Bit ke-5 hingga ke-8 dari uio_out tidak digunakan
+
     assign uio_oe = 8'b11111111;
 
     // UART byte-wise interface
