@@ -3,7 +3,7 @@
 
 module tt_um_top_motor_control(
     input wire clk,
-    input wire CPU_RESETN,
+    input wire rst_n,
     // UART
     input wire UART_RX,
     output wire UART_TX,
@@ -15,7 +15,9 @@ module tt_um_top_motor_control(
     output wire [3:0] LED,
     // Encoder input
     input wire [1:0] ENC_A,
-    input wire [1:0] ENC_B
+    input wire [1:0] ENC_B,
+
+    input wire ena
 );
 
     // UART byte-wise interface
@@ -26,7 +28,7 @@ module tt_um_top_motor_control(
     // UART RX/TX (8-bit simple)
     uart_rx #(.CLK_FREQ(100_000_000), .BAUD(115200)) u_uart_rx (
         .clk(clk),
-        .rst_n(CPU_RESETN),
+        .rst_n(rst_n),
         .rx(UART_RX),
         .data(uart_rx_data),
         .data_valid(uart_rx_valid)
@@ -37,7 +39,7 @@ module tt_um_top_motor_control(
 
     uart_tx #(.CLK_FREQ(100_000_000), .BAUD(115200)) u_uart_tx (
         .clk(clk),
-        .rst_n(CPU_RESETN),
+        .rst_n(rst_n),
         .data(uart_tx_data),
         .data_valid(uart_tx_valid),
         .tx(UART_TX),
@@ -93,8 +95,8 @@ module tt_um_top_motor_control(
         end
     endfunction
 
-    always @(posedge clk or negedge CPU_RESETN) begin
-        if (!CPU_RESETN) begin
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
             pwm_reg0 <= 0;
             pwm_reg1 <= 0;
             psc_reg <= 99;
@@ -414,7 +416,7 @@ module tt_um_top_motor_control(
     // PID Controller for Motor 0
     pid_controller u_pid0 (
         .clk(clk),
-        .rst_n(CPU_RESETN),
+        .rst_n(rst_n),
         .setpoint(pid_setpoint0),
         .kp(pid_kp0),
         .ki(pid_ki0),
@@ -430,7 +432,7 @@ module tt_um_top_motor_control(
     // PID Controller for Motor 1
     pid_controller u_pid1 (
         .clk(clk),
-        .rst_n(CPU_RESETN),
+        .rst_n(rst_n),
         .setpoint(pid_setpoint1),
         .kp(pid_kp1),
         .ki(pid_ki1),
@@ -445,7 +447,7 @@ module tt_um_top_motor_control(
 
     pwm_gen u_pwm0 (
         .clk(clk),
-        .rst_n(CPU_RESETN),
+        .rst_n(rst_n),
         .psc(psc_reg),
         .ccr(ccr_reg),
         .pwm_in(final_pwm0),  // Use final PWM (either manual or PID)
@@ -455,7 +457,7 @@ module tt_um_top_motor_control(
 
     pwm_gen u_pwm1 (
         .clk(clk),
-        .rst_n(CPU_RESETN),
+        .rst_n(rst_n),
         .psc(psc_reg),
         .ccr(ccr_reg),
         .pwm_in(final_pwm1),  // Use final PWM (either manual or PID)
@@ -471,7 +473,7 @@ module tt_um_top_motor_control(
     
     simple_encoder u_enc0 (
         .clk(clk),
-        .rst_n(CPU_RESETN),
+        .rst_n(rst_n),
         .enc_a(ENC_A[0]),
         .enc_b(ENC_B[0]),
         .ppr(ppr_reg),  // Use PPR value from UART
@@ -483,7 +485,7 @@ module tt_um_top_motor_control(
     
     simple_encoder u_enc1 (
         .clk(clk),
-        .rst_n(CPU_RESETN),
+        .rst_n(rst_n),
         .enc_a(ENC_A[1]),
         .enc_b(ENC_B[1]),
         .ppr(ppr_reg),  // Use PPR value from UART
@@ -503,7 +505,7 @@ module tt_um_top_motor_control(
     
     encoder_data_tx u_enc_tx (
         .clk(clk),
-        .rst_n(CPU_RESETN),
+        .rst_n(rst_n),
         .transmit_enable(1'b1),  // ENABLE encoder dengan rate 3Hz untuk reliability ultimate
         .enc0_pos(enc0_position),
         .enc1_pos(enc1_position),
@@ -523,8 +525,8 @@ module tt_um_top_motor_control(
     reg [2:0] cmd_retry_count = 0;   // Retry mechanism for failed commands
     reg cmd_needs_retry = 0;
     
-    always @(posedge clk or negedge CPU_RESETN) begin
-        if (!CPU_RESETN) begin
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
             uart_tx_data <= 0;
             uart_tx_valid <= 0;
             cmd_delay <= 0;

@@ -12,7 +12,7 @@ module tb ();
 
     // Clock and reset
     reg clk;
-    reg CPU_RESETN;
+    reg rst_n;
 
     // UART
     reg UART_RX;
@@ -31,17 +31,20 @@ module tb ();
     reg [1:0] ENC_A;
     reg [1:0] ENC_B;
 
+    reg ena;
+
     // Instantiate the top module
     tt_um_top_motor_control uut (
         .clk(clk),
-        .CPU_RESETN(CPU_RESETN),
+        .rst_n(rst_n),
         .UART_RX(UART_RX),
         .UART_TX(UART_TX),
         .PWM_OUT(PWM_OUT),
         .MOTOR_IN(MOTOR_IN),
         .LED(LED),
         .ENC_A(ENC_A),
-        .ENC_B(ENC_B)
+        .ENC_B(ENC_B),
+        .ena(ena)
     );
 
 endmodule
